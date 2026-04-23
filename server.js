@@ -21,6 +21,20 @@ async function initDB() {
       dbConn = client.db();
       dbMode = 'mongo';
       console.log('📦 Connected to MongoDB Atlas');
+
+      // ตรวจสอบและสร้าง Admin เริ่มต้นถ้ายังไม่มีใครในระบบ
+      const userCount = await dbConn.collection('users').countDocuments();
+      if (userCount === 0) {
+        await dbConn.collection('users').insertOne({
+          id: 1,
+          username: 'admin',
+          password: '8520',
+          name: 'Administrator',
+          role: 'admin'
+        });
+        await dbConn.collection('meta').updateOne({ id: 'main' }, { $set: { nextUserId: 2 } }, { upsert: true });
+        console.log('👤 Created default admin user (admin/8520)');
+      }
     } catch (e) {
       console.warn('⚠️ MongoDB connection failed, falling back to JSON file:', e.message);
       dbMode = 'json';
