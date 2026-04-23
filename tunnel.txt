@@ -1,0 +1,7 @@
+﻿ssh : 
+At line:1 char:1
++ ssh -p 443 -R0:localhost:500 -o StrictHostKeyChecking=no a.pinggy.io  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

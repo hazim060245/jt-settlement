@@ -1,0 +1,14 @@
+{
+  "name": "jnt-express-settlement",
+  "version": "1.0.0",
+  "description": "Professional settlement system for J&T Express branches.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.21.0"
+  },
+  "author": "J&T Admin",
+  "license": "ISC"
+}
