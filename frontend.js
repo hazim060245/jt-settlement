@@ -275,6 +275,10 @@ async function openSession(date, code, status) {
 
   const dropInp = document.getElementById('drop-cash-input');
   if (dropInp) dropInp.value = appData.drop_cash || '';
+  const expNoteInp = document.getElementById('expenses-note-input');
+  if (expNoteInp) expNoteInp.value = appData.expenses_note || '';
+  const expAmtInp = document.getElementById('expenses-amount-input');
+  if (expAmtInp) expAmtInp.value = appData.expenses_amount || '';
   buildCash('opening-list','opening','opening-total');
   buildCash('actual-list','actual','actual-total');
   renderPackages();
@@ -305,7 +309,7 @@ const I18N_TITLES = {
     overview_summary:'ภาพรวมสรุป', opening_tab:'เงินตั้งต้น (เช้า)', actual_tab:'นับเงินสด (เย็น)', shipment_log:'รายการพัสดุ', audit_history:'ประวัติการตรวจสอบ',
     admin_control:'ระบบจัดการแอดมิน', starting_balance:'ยอดเงินเริ่มต้น', daily_parcel_intake:'จำนวนพัสดุรับเข้าวันนี้', digital_verified:'ตรวจสอบยอดโอนแล้ว',
     expected_net_cash:'ยอดเงินสดที่ควรมี (สุทธิ)', initial_cash_sales:'(ยอดตั้งต้น + ขายเงินสด)', settlement_summary:'สรุปการปิดรอบ', export_report:'ส่งออกรายงาน',
-    opening_float_label:'ยอดเงินตั้งต้นสาขา (1)', daily_sales_label:'ยอดขายเงินสดประจำวัน (2)', drop_cash_label:'ยอดนำส่งเงิน (Cash Drop)',
+    opening_float_label:'ยอดเงินตั้งต้นสาขา (1)', daily_sales_label:'ยอดขายเงินสดประจำวัน (2)', drop_cash_label:'ยอดนำส่งเงินพี่ก้อง', expenses_label:'ค่าใช้จ่ายอื่นๆ',
     actual_counted_label:'ยอดเงินสดที่นับได้จริง (สุทธิ)', net_variance:'ส่วนต่างยอดการตรวจสอบ', compliance_ready:'พร้อมรับการตรวจสอบ', compliance_desc:'ข้อมูลทั้งหมดถูกลงนามเข้ารหัส',
     cloud_sync_active:'ซิงค์ข้อมูลคลาวด์ทำงาน', sync_desc:'ข้อมูลถูกสำรองไปยังเซิร์ฟเวอร์หลักแล้ว', audit_lock_status:'สถานะการตรวจสอบ', draft_mode:'อยู่ระหว่างดำเนินการ',
     commit_audit:'ยืนยันการตรวจสอบ', reset_audit_logs:'ล้างข้อมูลบันทึกทั้งหมด', initial_phase_audit:'การตรวจสอบยอดตั้งต้น', final_phase_audit:'การตรวจสอบยอดเงินสดสุทธิ',
@@ -323,7 +327,7 @@ const I18N_TITLES = {
     overview_summary:'Overview Summary', opening_tab:'Opening Float (Morning)', actual_tab:'Actual Cash (Evening)', shipment_log:'Shipment Log', audit_history:'Audit History',
     admin_control:'Admin Control', starting_balance:'Starting balance', daily_parcel_intake:'Daily parcel intake', digital_verified:'Digital verified',
     expected_net_cash:'Expected Net Cash', initial_cash_sales:'(Initial + Cash Sales)', settlement_summary:'Settlement Summary', export_report:'Export Report',
-    opening_float_label:'Branch Opening Float (1)', daily_sales_label:'Daily Physical Cash Sales (2)', drop_cash_label:'Cash Drop (Sent to Bank)',
+    opening_float_label:'Branch Opening Float (1)', daily_sales_label:'Daily Physical Cash Sales (2)', drop_cash_label:'Cash Drop (Sent to Bank)', expenses_label:'Other Expenses',
     actual_counted_label:'Actual Counted Cash (Final)', net_variance:'Net Reconciliation Variance', compliance_ready:'Compliance Ready', compliance_desc:'All audits are cryptographically signed.',
     cloud_sync_active:'Cloud Sync Active', sync_desc:'Data synchronized with Master Hub.', audit_lock_status:'Audit Lock Status', draft_mode:'DRAFT MODE',
     commit_audit:'COMMIT AUDIT', reset_audit_logs:'Reset Audit Logs', initial_phase_audit:'Initial Phase Audit', final_phase_audit:'Final Phase Audit',
@@ -382,6 +386,18 @@ window.onCashInput = function(prefix, totalId) {
 window.onDropCashInput = function(val) {
   appData.drop_cash=parseFloat(val)||0;
   save('drop_cash_dummy',appData.drop_cash);
+  updateDashboard();
+};
+
+window.onExpensesNoteInput = function(val) {
+  appData.expenses_note = val;
+  save('expenses_note_dummy', val);
+  updateDashboard();
+};
+
+window.onExpensesAmountInput = function(val) {
+  appData.expenses_amount = parseFloat(val)||0;
+  save('expenses_amount_dummy', appData.expenses_amount);
   updateDashboard();
 };
 
@@ -445,9 +461,10 @@ function renderPackages(){
 function updateDashboard(){
   const opening=cashTotal('opening'), actual=cashTotal('actual');
   const pkgs=getPackages(), dropCash=parseFloat(appData.drop_cash)||0;
+  const expensesAmount=parseFloat(appData.expenses_amount)||0;
   let cashPkg=0, transfer=0;
   pkgs.forEach(p=>{ if(p.payment==='เงินสด')cashPkg+=parseFloat(p.amount)||0; else transfer+=parseFloat(p.amount)||0; });
-  const expected=opening+cashPkg-dropCash, diff=actual-expected;
+  const expected=opening+cashPkg-dropCash-expensesAmount, diff=actual-expected;
   const upd=(id,val)=>{ const el=document.getElementById(id); if(el)el.textContent=val; };
   upd('d-opening',fmt(opening)); upd('d-pkg-count',pkgs.length);
   upd('d-transfer',fmt(transfer)); upd('s-expected',fmt(expected));
@@ -455,6 +472,9 @@ function updateDashboard(){
   upd('opening-total',fmt(opening)); // Update Morning Summary Card
   upd('s-cash-pkg-dash',fmt(cashPkg));
   upd('s-drop-cash-dash','-'+fmt(dropCash)); 
+  upd('s-expenses-dash','-'+fmt(expensesAmount));
+  const expNoteEl = document.getElementById('s-expenses-note');
+  if(expNoteEl) { expNoteEl.textContent = appData.expenses_note ? `(${appData.expenses_note})` : ''; }
   upd('s-actual-dash',fmt(actual)); 
   upd('actual-total',fmt(actual));   // Update Evening Summary Card
 
@@ -536,8 +556,10 @@ window.renderHistory = function(){
   const tbody=document.getElementById('hist-daily-tbody'); if(!tbody)return;
   tbody.innerHTML='';
   filtered.forEach(r=>{
-    const expected=(r.opening_total||0)+(r.cash_pkg_total||0);
-    const diff=r.actual_total?(r.actual_total-expected):0;
+    let expensesTotal = 0;
+    try { if(r.data_json) expensesTotal = parseFloat(JSON.parse(r.data_json).expenses_amount) || 0; } catch(e){}
+    const expected=(r.opening_total||0)+(r.cash_pkg_total||0)-(r.drop_cash_total||0)-expensesTotal;
+    const diff=r.actual_total!=null?(r.actual_total-expected):0;
     const color=diff>=0?'var(--success)':'var(--danger)';
     const tr=document.createElement('tr');
     tr.style.cssText='height:64px;border-bottom:1px solid var(--border-color);';

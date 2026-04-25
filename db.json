@@ -1,0 +1,94 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "8520",
+      "name": "Administrator",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "admin1",
+      "password": "password123",
+      "name": "Admin One",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "username": "testuser2",
+      "password": "testpass2",
+      "name": "ซิม",
+      "role": "user"
+    },
+    {
+      "id": 4,
+      "username": "009",
+      "password": "8520",
+      "name": "hazimkhan khankhen",
+      "role": "admin"
+    },
+    {
+      "id": 5,
+      "username": "008",
+      "password": "0000",
+      "name": "เปรม",
+      "role": "user"
+    }
+  ],
+  "records": [
+    {
+      "user_id": "4",
+      "date": "2026-04-22",
+      "opening_total": 1650,
+      "actual_total": 1700,
+      "transfer_total": 0,
+      "cash_pkg_total": 50,
+      "drop_cash_total": 0,
+      "pkg_count": 1,
+      "status": "final",
+      "session_code": "-",
+      "data_json": "{\"opening\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":1,\"100\":1,\"500\":1,\"1000\":1},\"actual\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":2,\"100\":1,\"500\":1,\"1000\":1},\"packages\":[{\"id\":1776908678546,\"tracking\":\"8505\",\"amount\":50,\"payment\":\"เงินสด\",\"time\":\"08:44\"}],\"status\":\"final\"}"
+    },
+    {
+      "user_id": "5",
+      "date": "2026-04-23",
+      "opening_total": 1700,
+      "actual_total": 770,
+      "transfer_total": 0,
+      "cash_pkg_total": 70,
+      "drop_cash_total": 1000,
+      "pkg_count": 1,
+      "status": "final",
+      "session_code": "008 เปรม",
+      "data_json": "{\"opening\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":2,\"100\":1,\"500\":1,\"1000\":1},\"actual\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":1,\"50\":1,\"100\":2,\"500\":1,\"1000\":0},\"packages\":[{\"id\":1776915146627,\"tracking\":\"7890\",\"amount\":70,\"payment\":\"เงินสด\",\"time\":\"10:32\"}],\"status\":\"final\",\"drop_cash\":1000,\"drop_cash_dummy\":1000}"
+    },
+    {
+      "user_id": "4",
+      "date": "2026-04-24",
+      "opening_total": 770,
+      "actual_total": 0,
+      "transfer_total": 0,
+      "cash_pkg_total": 0,
+      "drop_cash_total": 0,
+      "pkg_count": 0,
+      "status": "draft",
+      "session_code": "009 ซิม",
+      "data_json": "{\"opening\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":1,\"50\":1,\"100\":2,\"500\":1,\"1000\":0},\"actual\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":0,\"100\":0,\"500\":0,\"1000\":0},\"packages\":[],\"status\":\"draft\"}"
+    },
+    {
+      "user_id": "3",
+      "date": "2026-04-25",
+      "opening_total": 0,
+      "actual_total": 0,
+      "transfer_total": 0,
+      "cash_pkg_total": 0,
+      "drop_cash_total": 0,
+      "pkg_count": 0,
+      "status": "draft",
+      "session_code": "testuser2 AdminTest",
+      "data_json": "{\"opening\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":0,\"100\":0,\"500\":0,\"1000\":0},\"actual\":{\"1\":0,\"2\":0,\"5\":0,\"10\":0,\"20\":0,\"50\":0,\"100\":0,\"500\":0,\"1000\":0},\"packages\":[],\"status\":\"draft\",\"expenses_note\":\"\",\"expenses_note_dummy\":\"\"}"
+    }
+  ],
+  "nextUserId": 6
+}
